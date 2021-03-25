@@ -44,7 +44,7 @@ export default {
           const expired = response.data.expired
           document.cookie = `sessionToken=${token}; expires=${new Date(expired)};`
 
-          vm.$router.push('/')
+          vm.$router.push('/admin/products')
         }
       })
     }
