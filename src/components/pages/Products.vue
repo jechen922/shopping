@@ -1,5 +1,7 @@
 <template>
   <div>
+    <loading :active.sync="isLoading"></loading>
+
     <div class="text-right mt-4">
       <button type="button" class="btn btn-primary" @click="openProductModal(true)">建立新的產品</button>
     </div>
@@ -57,10 +59,10 @@
                 </div>
                 <div class="form-group">
                   <label for="customFile">或 上傳圖片
-                    <i class="fas fa-spinner fa-spin"></i>
+                    <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i>
                   </label>
                   <input type="file" id="customFile" class="form-control"
-                    ref="files" value="" @change="uploadFile">
+                    ref="files" @change="uploadFile">
                 </div>
                 <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80"
                   class="img-fluid" :src="tempProduct.imageUrl" alt="">
@@ -171,14 +173,20 @@ export default {
     return {
       products: [],
       tempProduct: {},
-      isCreated: false
+      isCreated: false,
+      isLoading: false,
+      status: {
+        fileUploading: false
+      }
     }
   },
   methods: {
     getProducts () {
       const api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/admin/products`
       const vm = this
+      vm.isLoading = true
       this.$http.get(api).then(response => {
+        vm.isLoading = false
         if (response.data.success) {
           vm.products = response.data.products
         } else {
@@ -205,6 +213,8 @@ export default {
       $('#delProductModal').modal('hide')
     },
     openProductModal (isCreated, item) {
+      // 清空上傳檔案的 input 元件內容
+      document.getElementById('customFile').value = ''
       if (isCreated) {
         this.tempProduct = {}
         this.isCreated = true
@@ -215,6 +225,8 @@ export default {
       $('#productModal').modal('show')
     },
     saveProduct () {
+      // todo: 等待加入判斷圖片是否正在上傳
+
       const vm = this
 
       let api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/admin/product`
@@ -236,15 +248,22 @@ export default {
     },
     uploadFile () {
       const uploadedFile = this.$refs.files.files[0]
+      if (typeof (uploadedFile) === 'undefined') {
+        return
+      }
+
       const vm = this
       const formData = new FormData()
       formData.append('file-to-upload', uploadedFile)
       const api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/admin/upload`
+
+      vm.status.fileUploading = true
       this.$http.post(api, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
+        vm.status.fileUploading = false
         if (response.data.success) {
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl)
         }
