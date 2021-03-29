@@ -266,6 +266,8 @@ export default {
         vm.status.fileUploading = false
         if (response.data.success) {
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl)
+        } else {
+          this.$bus.$emit('message:push', `上傳檔案失敗: ${response.data.message}`, 'danger')
         }
       })
     }
