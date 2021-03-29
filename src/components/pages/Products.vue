@@ -35,6 +35,25 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" :class="{'disabled': !pagination.has_pre }">
+          <a class="page-link" href="#" aria-label="Previous" @click.prevent="getProducts(pagination.current_page - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"
+          v-for="page in pagination.total_pages" :key="page"
+          :class="{'active': page === pagination.current_page }">
+          <a class="page-link" href="#" @click.prevent="getProducts(page)">{{page}}</a>
+        </li>
+        <li class="page-item" :class="{'disabled': !pagination.has_next }">
+          <a class="page-link" href="#" aria-label="Next" @click.prevent="getProducts(pagination.current_page + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <!-- productModal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -172,6 +191,7 @@ export default {
   data: function () {
     return {
       products: [],
+      pagination: {},
       tempProduct: {},
       isCreated: false,
       isLoading: false,
@@ -181,14 +201,15 @@ export default {
     }
   },
   methods: {
-    getProducts () {
-      const api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/admin/products`
+    getProducts (page = 1) {
+      const api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/admin/products?page=${page}`
       const vm = this
       vm.isLoading = true
       this.$http.get(api).then(response => {
         vm.isLoading = false
         if (response.data.success) {
           vm.products = response.data.products
+          vm.pagination = response.data.pagination
         } else {
           // todo: 等待加入錯誤判斷
         }
