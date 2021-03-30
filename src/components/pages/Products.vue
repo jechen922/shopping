@@ -24,7 +24,7 @@
           <td class="text-right">
             {{ item.price }}
           </td>
-          <td>
+          <td class="text-center">
             <span v-if="item.is_enabled" class="text-success">啟用</span>
             <span v-else class="text-danger">停用</span>
           </td>
@@ -35,25 +35,7 @@
         </tr>
       </tbody>
     </table>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item" :class="{'disabled': !pagination.has_pre }">
-          <a class="page-link" href="#" aria-label="Previous" @click.prevent="getProducts(pagination.current_page - 1)">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li class="page-item"
-          v-for="page in pagination.total_pages" :key="page"
-          :class="{'active': page === pagination.current_page }">
-          <a class="page-link" href="#" @click.prevent="getProducts(page)">{{page}}</a>
-        </li>
-        <li class="page-item" :class="{'disabled': !pagination.has_next }">
-          <a class="page-link" href="#" aria-label="Next" @click.prevent="getProducts(pagination.current_page + 1)">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <pagination :page="pagination" v-on:emitGetProduct="getProducts"></pagination>
     <!-- productModal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -187,6 +169,8 @@
 
 <script>
 import $ from 'jquery'
+import pagination from './Pagination'
+
 export default {
   data: function () {
     return {
@@ -199,6 +183,9 @@ export default {
         fileUploading: false
       }
     }
+  },
+  components: {
+    pagination
   },
   methods: {
     getProducts (page = 1) {
