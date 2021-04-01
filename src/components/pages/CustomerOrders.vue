@@ -80,7 +80,7 @@
     <pagination :page="pagination" v-on:emitGetProduct="getProducts"></pagination>
 
     <!-- 購物車 -->
-    <div v-if="cart.carts.length > 0">
+    <div v-if="cart.hasOwnProperty('carts') && cart.carts.length > 0">
     <!-- <div> -->
       <table class="table">
         <thead>
@@ -153,7 +153,7 @@
             <validation-provider rules="required|digits:10" v-slot="{ errors, classes }">
               <div class="form-group">
                 <label for="usertel">收件人電話</label>
-                <input id="usertel" type="text" name="電話" v-model="form.user.usertel"
+                <input id="usertel" type="text" name="電話" v-model="form.user.tel"
                   placeholder="請輸入電話"
                   class="form-control" :class="classes">
                 <span class="invalid-feedback">{{ errors[0] }}</span>
@@ -163,7 +163,7 @@
             <validation-provider rules="required|address" v-slot="{ errors, classes }">
               <div class="form-group">
                 <label for="useraddress">收件人地址</label>
-                <input id="useraddress" type="text" name="地址" v-model="form.user.useraddress"
+                <input id="useraddress" type="text" name="地址" v-model="form.user.address"
                   placeholder="請輸入地址"
                   class="form-control" :class="classes">
                 <span class="invalid-feedback">{{ errors[0] }}</span>
@@ -271,7 +271,7 @@ export default {
       this.$http.post(api, { data: cart }).then(response => {
         vm.status.loadingToCart = ''
         if (response.data.success) {
-          this.getCart()
+          vm.getCart()
           $('#productModal').modal('hide')
         } else {
           this.$bus.$emit('message:push', `加入購物車失敗: ${response.data.message}`, 'danger')
@@ -285,7 +285,7 @@ export default {
       this.$http.delete(api).then(response => {
         vm.isLoading = false
         if (response.data.success) {
-          this.getCart()
+          vm.getCart()
         } else {
           this.$bus.$emit('message:push', `移除購物車產品失敗: ${response.data.message}`, 'danger')
         }
@@ -301,7 +301,7 @@ export default {
       this.$http.post(api, { data: coupon }).then(response => {
         vm.isLoading = false
         if (response.data.success) {
-          this.getCart()
+          vm.getCart()
         } else {
           this.$bus.$emit('message:push', `套用優惠券失敗: ${response.data.message}`, 'danger')
         }
@@ -316,16 +316,7 @@ export default {
       this.$http.post(api, { data: order }).then(response => {
         vm.isLoading = false
         if (response.data.success) {
-          this.getCart()
-          vm.form = {
-            user: {
-              name: '',
-              email: '',
-              tel: '',
-              address: ''
-            },
-            message: ''
-          }
+          vm.$router.push(`/customer_checkout/${response.data.orderId}`)
         } else {
           this.$bus.$emit('message:push', `建立訂單失敗: ${response.data.message}`, 'danger')
         }
