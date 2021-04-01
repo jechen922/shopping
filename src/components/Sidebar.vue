@@ -18,7 +18,7 @@
         </ul>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <router-link class="nav-link" to="/admin/products">
+            <router-link class="nav-link" to="/admin/orders">
               <i class="far fa-list-alt"></i>
               訂單列表
             </router-link>
