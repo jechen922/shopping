@@ -3,6 +3,11 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Dashboard from '@/components/Dashboard'
 import Login from '@/components/pages/Login'
+import Shopping from '@/components/pages/shopping/Shopping'
+import ShoppingProducts from '@/components/pages/shopping/Products'
+import ShoppingProduct from '@/components/pages/shopping/Product'
+import ShoppingOrder from '@/components/pages/shopping/Order'
+import ShoppingOrderCheck from '@/components/pages/shopping/OrderCheck'
 import Products from '@/components/pages/Products'
 import Orders from '@/components/pages/Orders'
 import Coupons from '@/components/pages/Coupons'
@@ -12,6 +17,7 @@ import CustomerCheckout from '@/components/pages/CustomerCheckout'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '*',
@@ -29,6 +35,34 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/',
+      // name: 'Shopping',
+      redirect: '/products',
+      component: Shopping,
+      children: [
+        {
+          path: 'products',
+          name: 'ShoppingProducts',
+          component: ShoppingProducts
+        },
+        {
+          path: 'products/:productId',
+          name: 'ShoppingProduct',
+          component: ShoppingProduct
+        },
+        {
+          path: 'orders',
+          name: 'ShoppingOrder',
+          component: ShoppingOrder
+        },
+        {
+          path: 'orders/:orderId',
+          name: 'ShoppingOrderCheck',
+          component: ShoppingOrderCheck
+        }
+      ]
     },
     {
       path: '/admin',

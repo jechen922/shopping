@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <Navbar></Navbar>
+  <div id="wrapper">
+    <Sidebar></Sidebar>
     <Alert></Alert>
-    <div class="container-fluid">
-      <div class="row">
-        <Sidebar></Sidebar>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-          <router-view></router-view>
-        </main>
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content">
+        <Navbar></Navbar>
+        <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <router-view></router-view>
+          </div>
       </div>
     </div>
   </div>
