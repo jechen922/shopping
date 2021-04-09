@@ -9,8 +9,14 @@
         <div id="content">
           <!-- Navigation -->
           <Navbar></Navbar>
-          <div class="mb-3 p-0" style="height: 350px; background-size: cover; background-position: 50% 55%"
+          <div class="mb-3 p-0" style="height: 400px; background-size: cover; background-position: 20% 50%; position:relative;"
             :style="{backgroundImage: `url(https://images.unsplash.com/photo-1603616678867-1fa182a9b02b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)`}">
+            <div class="bg-dark p-2" style="position:absolute;
+              top: 40%; left: 5%;
+              opacity:0.8; border-radius:.35rem;">
+              <h2 class="my-2 text-center" style="color: white; font-size: 2rem;">沒有最便宜，只有更便宜！</h2>
+              <p class="my-2 text-center" style="color: white; font-size: 1.3rem;">天天打折，打到骨折</p>
+            </div>
           </div>
           <div class="container-fluid">
             <router-view></router-view>

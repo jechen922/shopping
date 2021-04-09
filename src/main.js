@@ -73,14 +73,6 @@ Vue.filter('datetime', datetimeFilter)
 
 axios.defaults.withCredentials = true
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-})
-
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const api = `${process.env.API_PATH}/api/user/check`
@@ -88,6 +80,27 @@ router.beforeEach((to, from, next) => {
       if (response.data.success) {
         next()
       } else {
+        const userString = localStorage.getItem('user')
+        if (userString !== null) {
+          const user = JSON.parse(userString)
+
+          // Login
+          const api = `${process.env.API_PATH}/admin/signin`
+          console.log('user', user)
+          axios.post(api, user).then(response => {
+            if (response.data.success) {
+              const token = response.data.token
+              const expired = response.data.expired
+              document.cookie = `sessionToken=${token}; expires=${new Date(expired)};`
+              next()
+            } else {
+              next({
+                path: '/login'
+              })
+            }
+          })
+          return
+        }
         next({
           path: '/login'
         })
@@ -96,4 +109,12 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  components: { App },
+  template: '<App/>'
 })

@@ -14,7 +14,7 @@
 
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" v-model="rememberUser"> Remember me
         </label>
       </div>
       <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
@@ -31,25 +31,27 @@ export default {
       user: {
         username: '',
         password: ''
-      }
+      },
+      rememberUser: false
     }
   },
   methods: {
     signin: function () {
       const api = `${process.env.API_PATH}/admin/signin`
       const vm = this
+      if (vm.rememberUser) {
+        localStorage.setItem('user', JSON.stringify(vm.user))
+      }
       this.$http.post(api, vm.user).then(response => {
         if (response.data.success) {
           const token = response.data.token
           const expired = response.data.expired
           document.cookie = `sessionToken=${token}; expires=${new Date(expired)};`
-
           vm.$router.push('/admin/products')
         }
       })
     }
   }
-
 }
 </script>
 
