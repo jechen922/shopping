@@ -30,7 +30,7 @@
         </tr>
       </tbody>
     </table>
-    <pagination :page="pagination" v-on:emitGetOrders="getOrders"></pagination>
+    <pagination emitMethod='emitGetOrders' :page="pagination" v-on:emitGetOrders="getOrders"></pagination>
   </div>
 </template>
 

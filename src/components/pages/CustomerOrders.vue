@@ -77,7 +77,7 @@
       </div>
     </div>
 
-    <pagination :page="pagination" v-on:emitGetProduct="getProducts"></pagination>
+    <pagination emitMethod='emitGetCustomerOrders' :page="pagination" v-on:emitGetCustomerOrders="getProducts"></pagination>
 
     <!-- 購物車 -->
     <div v-if="cart.hasOwnProperty('carts') && cart.carts.length > 0">

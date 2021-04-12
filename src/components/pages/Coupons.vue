@@ -31,7 +31,7 @@
         </tr>
       </tbody>
     </table>
-    <pagination :page="pagination" v-on:emitGetProduct="getCoupons"></pagination>
+    <pagination emitMethod='emitGetCoupons' :page="pagination" v-on:emitGetCoupons="getCoupons"></pagination>
 
     <!-- couponModal -->
     <div class="modal fade" id="couponModal" tabindex="-1" role="dialog"

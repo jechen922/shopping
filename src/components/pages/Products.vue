@@ -35,7 +35,7 @@
         </tr>
       </tbody>
     </table>
-    <pagination :page="pagination" v-on:emitGetProduct="getProducts"></pagination>
+    <pagination emitMethod='emitGetProducts' :page="pagination" v-on:emitGetProducts="getProducts"></pagination>
     <!-- productModal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -198,7 +198,7 @@ export default {
           vm.products = response.data.products
           vm.pagination = response.data.pagination
         } else {
-          // todo: 等待加入錯誤判斷
+          this.$bus.$emit('message:push', `取得產品列表失敗: ${response.data.message}`, 'danger')
         }
       })
     },
