@@ -1,5 +1,6 @@
 <template>
   <div class="text-center" @submit.prevent="signin">
+    <Alert></Alert>
     <form  class="form-signin">
       <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -18,12 +19,13 @@
         </label>
       </div>
       <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+      <p class="mt-5 mb-3 text-muted">&copy; 2020–2021</p>
     </form>
   </div>
 </template>
 
 <script>
+import Alert from '../AlertMessage'
 export default {
   name: 'login',
   data () {
@@ -34,6 +36,9 @@ export default {
       },
       rememberUser: false
     }
+  },
+  components: {
+    Alert
   },
   methods: {
     signin: function () {
@@ -48,6 +53,8 @@ export default {
           const expired = response.data.expired
           document.cookie = `sessionToken=${token}; expires=${new Date(expired)};`
           vm.$router.push('/admin/products')
+        } else {
+          this.$bus.$emit('message:push', `${response.data.message}`, 'danger')
         }
       })
     }
