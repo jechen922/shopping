@@ -50,6 +50,13 @@
                 </table>
               </div>
             </li>
+            <li class="nav-item no-arrow mx-1">
+              <a class="nav-link" id="login" role="button"
+                :href="'/login'"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-sign-in" style="font-size:1.3rem"></i>
+              </a>
+            </li>
           </ul>
         </div>
       </div>

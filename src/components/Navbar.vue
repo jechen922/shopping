@@ -20,7 +20,7 @@ export default {
           const expired = Date.now()
           document.cookie = `sessionToken=; expires=${new Date(expired)};`
           localStorage.removeItem('user')
-          vm.$router.push('/signin')
+          vm.$router.push('/')
         } else {
           this.$bus.$emit('message:push', `登出失敗: ${response.data.message}`, 'danger')
         }

@@ -23,18 +23,20 @@ export default new Router({
       path: '*',
       redirect: 'login'
     },
-    // {
-    //   path: '/',
-    //   name: 'HelloWorld',
-    //   component: HelloWorld,
-    //   meta: {
-    //     requiresAuth: true
-    //   }
-    // },
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      beforeEnter (to, from, next) {
+        const userString = localStorage.getItem('user')
+        if (userString !== null) {
+          next({
+            path: '/admin/products'
+          })
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/',
