@@ -54,13 +54,13 @@ export default {
       const vm = this
       vm.isLoading = true
       this.$http.get(api).then(response => {
-        vm.isLoading = false
         if (response.data.success) {
           vm.orders = response.data.orders
           vm.pagination = response.data.pagination
         } else {
           this.$bus.$emit('message:push', `取得訂單列表失敗: ${response.data.message}`, 'danger')
         }
+        vm.isLoading = false
       })
     }
   },
