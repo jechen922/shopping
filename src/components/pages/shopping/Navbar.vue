@@ -39,12 +39,15 @@
                     <td class="text-right">{{item.qty}} / {{item.product.unit}}</td>
                     <td class="text-right">{{item.product.price * item.qty | currency}}</td>
                   </tr>
+                  <tr>
+                    <td class="text-center" colspan="2">
+                      <a :href="'/orders'" class="btn btn-primary">
+                        <i class="fas fa-cart-arrow-down"></i> 結帳去
+                      </a>
+                    </td>
+                    <td class="text-right" colspan="2">總計： {{total | currency}}</td>
+                  </tr>
                 </table>
-                <div class="modal-footer">
-                  <a :href="'/orders'" class="btn btn-primary">
-                    <i class="fas fa-cart-arrow-down"></i> 結帳去
-                  </a>
-                </div>
               </div>
             </li>
           </ul>
@@ -61,7 +64,8 @@ export default {
   data () {
     return {
       isShowCart: false,
-      cart: {}
+      cart: {},
+      total: 0
     }
   },
   methods: {
@@ -82,6 +86,7 @@ export default {
       this.$http.get(api).then(response => {
         if (response.data.success) {
           vm.cart = response.data.data
+          vm.calculateTotal()
         } else {
           this.$bus.$emit('message:push', `取得購物車資訊失敗: ${response.data.message}`, 'danger')
         }
@@ -100,6 +105,13 @@ export default {
           this.$bus.$emit('message:push', `移除購物車產品失敗: ${response.data.message}`, 'danger')
         }
         vm.isLoading = false
+      })
+    },
+    calculateTotal: function () {
+      const vm = this
+      vm.total = 0
+      vm.cart.carts.forEach(function (item) {
+        vm.total += item.product.price * item.qty
       })
     }
   },
