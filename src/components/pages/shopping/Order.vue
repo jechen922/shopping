@@ -33,13 +33,13 @@
                 </div>
               </td>
               <td class="align-middle">{{ item.qty }} / {{ item.product.unit }}</td>
-              <td class="align-middle text-right">{{ item.final_total }}</td>
+              <td class="align-middle text-right">{{ item.final_total | currency }}</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
               <td colspan="3" class="text-right">總計</td>
-              <td class="text-right">{{ cart.total }}</td>
+              <td class="text-right">{{ cart.total | currency }}</td>
             </tr>
             <tr v-if="cart.total != cart.final_total">
               <td colspan="3" class="text-right text-success">折扣價</td>
