@@ -12,8 +12,8 @@
       </div>
       <div class="col-lg-9">
         <div class="row">
-          <div class="col-lg-4 col-md-6 mb-4" v-for="item in filterProducts" :key=item.id @click="getProductDetail(item.id)">
-            <div class="card h-100 card-cursor-pointer" @click="goToProduct(item.id)">
+          <div class="col-lg-4 col-md-6 mb-4" v-for="item in filterProducts" :key=item.id>
+            <div class="card h-100">
               <div style="height: 150px; background-size: cover; background-position: center"
                 :style="{backgroundImage: `url(${item.imageUrl})`}">
               </div>
@@ -22,8 +22,12 @@
                 <p class="card-text text-right">{{item.description}}</p>
               </div>
               <div class="card-footer d-flex">
-                <a :href="'/products/' + item.id" class="btn btn-primary btn-user btn-block" @click.prevent="">
+                <a :href="'/products/' + item.id" class="btn btn-primary btn-user btn-block"
+                  @click.prevent="goToProduct(item.id)" v-if="item.is_enabled">
                   搶購去 <i class="fal fa-shopping-bag"></i>
+                  </a>
+                <a href="" class="btn btn-primary btn-user btn-block disabled" v-else>
+                  即將到貨 <i class="far fa-truck-moving"></i>
                   </a>
               </div>
             </div>
@@ -59,20 +63,6 @@ export default {
           })
         } else {
           this.$bus.$emit('message:push', `取得產品失敗: ${response.data.message}`, 'danger')
-        }
-        vm.isLoading = false
-      })
-    },
-    getProductDetail (id) {
-      const vm = this
-      const api = `${process.env.API_PATH}/api/${process.env.CUSTOM_PATH}/product/${id}`
-      vm.isLoading = true
-      this.$http.get(api).then(response => {
-        if (response.data.success) {
-          response.data.product.num = 1
-          vm.product = response.data.product
-        } else {
-          this.$bus.$emit('message:push', `取得商品資訊失敗: ${response.data.message}`, 'danger')
         }
         vm.isLoading = false
       })
